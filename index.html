@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Turnos - AREF</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body>
+    <div class="container" id="app">
+      <!-- <nav class="navbar navbar-dark navbar-expand-md bg-primary"> -->
+      <nav
+        class="navbar navbar-light"
+        style="background-color: #0075d5; color: rgba(255, 255, 255, 0.5);"
+      >
+        AREF - Turnos Online
+      </nav>
+      <form>
+        <div class="m-4">
+          <h4>{{steps.pasos[steps.active].title}}</h4>
+          <div id="paso-0" v-if="steps.active===0">
+            <div class="list-group">
+              <button
+                type="button"
+                v-for="sucursal in sucursales"
+                class="list-group-item list-group-item-action"
+                @click="seleccionSucursal(sucursal.value)"
+                v-bind:class="sucursalActiva(sucursal.value)"
+                :disabled="!sucursalHabilitada(sucursal.value)"
+              >
+                {{sucursal.display}}
+                <small v-if="!sucursalHabilitada(sucursal.value)" class="form-text text-muted">Sucursal no habilitada por el momento</small>
+            </div>
+          </div>
+
+          <div id="paso-1" v-if="steps.active===1">
+            <div class="list-group">
+              <button
+                type="button"
+                v-for="tramite in tramites"
+                class="list-group-item list-group-item-action"
+                @click="seleccionTramite(tramite.value)"
+                v-bind:class="tramiteActiva(tramite.value)"
+                v-if="tramiteDisponible(tramite.value)"
+                :disabled="!tramiteHabilitada(tramite.value)"
+              >
+                {{tramite.display}}
+                <small v-if="!tramiteHabilitada(tramite.value)" class="form-text text-muted">Trámite no habilitado por el momento</small>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div id="paso-2" v-if="steps.active===2">
+          <div class="d-flex flex-nowrap">
+            <button
+              type="button"
+              v-for="(dia,index) in filterdDia" :key="index"
+              class="btn btn-outline-primary px-4 py-4 pt-2 pb-2 m-2"
+              @click="seleccionDia(dia.value)"
+            >
+              {{dia.display}}
+            </button>
+          </div>
+          <div class="d-flex flex-nowrap">
+            <button
+              type="button"
+              v-for="(horario,index) in filterdHorarios" :key="index"
+              class="btn btn-outline-primary px-4 py-4 pt-2 pb-2 m-2"
+              @click="seleccionHorario(horario.value)"
+              v-bind:class="horarioActiva(horario.value)"
+            >
+              {{horario.display}}
+            </button>
+          </div>
+        </div>
+        <div id="paso-3" v-if="steps.active===3">
+          <div class="form-group row">
+            <label
+              for="apellidos"
+              class="col-sm-2 col-form-label col-form-labe-sm"
+              >Apellidos</label
+            >
+            <input
+              type="text"
+              name="apellidos"
+              id="apellidos"
+              class="form-control form-control-sm col-sm-10"
+            />
+          </div>
+          <div class="form-group row">
+            <label
+              for="nombres"
+              class="col-sm-2 col-form-label col-form-labe-sm"
+              >Nombres</label
+            >
+            <input
+              type="text"
+              name="nombres"
+              id="nombres"
+              class="form-control form-control-sm col-sm-10"
+            />
+          </div>
+          <div class="form-group row">
+            <label
+              for="documento"
+              class="col-sm-2 col-form-label col-form-labe-sm"
+              >Documento</label
+            >
+            <input
+              type="text"
+              name="documento"
+              id="documento"
+              class="form-control form-control-sm col-sm-10"
+            />
+          </div>
+          <div class="form-group row">
+            <label for="email" class="col-sm-2 col-form-label col-form-labe-sm"
+              >Email</label
+            >
+            <input
+              type="email"
+              name="email"
+              id="email"
+              class="form-control form-control-sm col-sm-10"
+            />
+          </div>
+          <div class="form-group row">
+            <label
+              for="telefono"
+              class="col-sm-2 col-form-label col-form-labe-sm"
+              >Telefono</label
+            >
+            <input
+              type="text"
+              name="telefono"
+              id="telefono"
+              class="form-control form-control-sm col-sm-10"
+            />
+          </div>
+        </div>
+
+        <div id="botonera" class="d-flex justify-content-around mt-3">
+          <button
+            type="button"
+            class="btn btn-primary"
+            @click="anteriorPaso"
+            :disabled="!controlAnterior"
+          >
+            < Atrás
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            @click="siguientePaso"
+            :disabled="!controlSiguiente"
+          >
+            Siguiente >
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            :disabled="!controlFinalizar"
+          >
+            Finalizar
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
